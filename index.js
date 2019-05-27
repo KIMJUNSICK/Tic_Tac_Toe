@@ -7,42 +7,6 @@ const container = [];
 let turn = "X";
 let full = "false";
 
-const handleMark = (whatLine, whatCon) => {
-  if (container[whatLine][whatCon].textContent === "") {
-    container[whatLine][whatCon].textContent = turn;
-
-    inspectRow(whatLine);
-    inspectColumn(whatCon);
-    inspectDiagonal1(whatLine, whatCon);
-    inspectDiagonal2(whatLine, whatCon);
-    handleVictory();
-  } else {
-    console.log("Nope");
-  }
-};
-
-const handleClick = event => {
-  let whatLine = line.indexOf(event.target.parentNode);
-
-  let whatCon = container[whatLine].indexOf(event.target);
-
-  handleMark(whatLine, whatCon);
-};
-
-for (let i = 1; i <= 3; i = i + 1) {
-  let tr = document.createElement("tr");
-  line.push(tr);
-  container.push([]);
-  for (let j = 1; j <= 3; j += 1) {
-    let td = document.createElement("td");
-    container[i - 1].push(td);
-    td.addEventListener("click", handleClick);
-    tr.appendChild(td);
-  }
-  table.appendChild(tr);
-}
-body.appendChild(table);
-
 const inspectRow = whatLine => {
   if (
     container[whatLine][0].textContent === turn &&
@@ -97,8 +61,51 @@ const handleTurn = () => {
 
 const handleVictory = () => {
   if (full === true) {
+    container.forEach(function(line) {
+      line.forEach(function(td) {
+        td.textContent = "";
+      });
+    });
     victory.innerText = "VICTORY";
+    turn = "X";
+    full = false;
   } else {
     handleTurn();
   }
 };
+
+const handleMark = (whatLine, whatCon) => {
+  if (container[whatLine][whatCon].textContent === "") {
+    container[whatLine][whatCon].textContent = turn;
+
+    inspectRow(whatLine);
+    inspectColumn(whatCon);
+    inspectDiagonal1(whatLine, whatCon);
+    inspectDiagonal2(whatLine, whatCon);
+    handleVictory();
+  } else {
+    console.log("Nope");
+  }
+};
+
+const handleClick = event => {
+  let whatLine = line.indexOf(event.target.parentNode);
+
+  let whatCon = container[whatLine].indexOf(event.target);
+
+  handleMark(whatLine, whatCon);
+};
+
+for (let i = 1; i <= 3; i = i + 1) {
+  let tr = document.createElement("tr");
+  line.push(tr);
+  container.push([]);
+  for (let j = 1; j <= 3; j += 1) {
+    let td = document.createElement("td");
+    container[i - 1].push(td);
+    td.addEventListener("click", handleClick);
+    tr.appendChild(td);
+  }
+  table.appendChild(tr);
+}
+body.appendChild(table);
